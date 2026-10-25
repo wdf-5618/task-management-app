@@ -81,7 +81,6 @@ function saveTasks() {
     return true;
   } catch (error) {
     console.warn("Could not save tasks in this browser.", error);
-    showToast("Changes are on screen, but this browser could not save them.");
     return false;
   }
 }
@@ -340,10 +339,10 @@ function handleSubmit(event) {
       priority: elements.priority.value,
       dueDate
     });
-    saveTasks();
+    const saved = saveTasks();
     resetForm();
     render();
-    showToast("Task updated.");
+    showToast(saved ? "Task updated." : "Task updated on screen, but could not be saved.");
     elements.title.focus();
     return;
   }
@@ -357,10 +356,10 @@ function handleSubmit(event) {
     completed: false,
     createdAt: Date.now()
   });
-  saveTasks();
+  const saved = saveTasks();
   resetForm();
   render();
-  showToast("Task added to your list.");
+  showToast(saved ? "Task added to your list." : "Task added on screen, but could not be saved.");
   elements.title.focus();
 }
 
@@ -368,9 +367,10 @@ function toggleTask(id) {
   const task = tasks.find((item) => item.id === id);
   if (!task) return;
   task.completed = !task.completed;
-  saveTasks();
+  const saved = saveTasks();
   render();
-  showToast(task.completed ? "One step done. Nice work." : "Task moved back to in progress.");
+  const message = task.completed ? "One step done. Nice work." : "Task moved back to in progress.";
+  showToast(saved ? message : "Change made on screen, but could not be saved.");
 }
 
 function deleteTask(id) {
@@ -381,9 +381,9 @@ function deleteTask(id) {
 
   tasks = tasks.filter((item) => item.id !== id);
   if (editingTaskId === id) resetForm();
-  saveTasks();
+  const saved = saveTasks();
   render();
-  showToast("Task deleted.");
+  showToast(saved ? "Task deleted." : "Task deleted on screen, but could not be saved.");
 }
 
 function showToast(message) {

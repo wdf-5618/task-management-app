@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7fb">
+  <meta name="description" content="A simple, private task manager with search, priorities, due dates, and local saving.">
+  <title>Daymark — Task Manager</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="topbar">
+    <a class="brand" href="#main-content" aria-label="Daymark home">
+      <span class="brand-mark" aria-hidden="true">✓</span>
+      <span>daymark<span class="brand-dot">.</span></span>
+    </a>
+    <div class="topbar-note"><span class="privacy-dot" aria-hidden="true"></span> Your tasks stay in this browser</div>
+  </header>
+
+  <main class="page-shell" id="main-content">
+    <section class="welcome-row" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow" id="today-label">YOUR DAY, IN FOCUS</p>
+        <h1 id="page-title">Make room for<br><span>what matters.</span></h1>
+        <p class="intro">A calmer place to collect your tasks and keep moving.</p>
+      </div>
+      <div class="welcome-art" aria-hidden="true">
+        <div class="art-orbit orbit-one"></div>
+        <div class="art-orbit orbit-two"></div>
+        <div class="art-check">✓</div>
+        <span class="art-spark spark-one">✳</span>
+        <span class="art-spark spark-two">✦</span>
+      </div>
+    </section>
+
+    <section class="stats-grid" aria-label="Task overview">
+      <article class="stat-card stat-total">
+        <div class="stat-topline"><span class="stat-label">All tasks</span><span class="stat-icon" aria-hidden="true">◫</span></div>
+        <p class="stat-number" id="total-count">0</p>
+        <p class="stat-caption">Everything on your list</p>
+      </article>
+      <article class="stat-card stat-progress">
+        <div class="stat-topline"><span class="stat-label">Completed</span><span class="stat-icon" aria-hidden="true">✓</span></div>
+        <p class="stat-number" id="completed-count">0</p>
+        <p class="stat-caption" id="completion-caption">Small steps add up</p>
+      </article>
+      <article class="stat-card stat-overdue">
+        <div class="stat-topline"><span class="stat-label">Overdue</span><span class="stat-icon" aria-hidden="true">◷</span></div>
+        <p class="stat-number" id="overdue-count">0</p>
+        <p class="stat-caption">Due dates to revisit</p>
+      </article>
+    </section>
+
+    <section class="workspace" aria-label="Manage your tasks">
+      <aside class="composer-panel" aria-labelledby="form-heading">
+        <div class="section-heading">
+          <span class="heading-kicker">YOUR NEXT STEP</span>
+          <h2 id="form-heading">Add a task</h2>
+          <p>Keep it clear. You can edit the details later.</p>
+        </div>
+
+        <form id="task-form">
+          <label for="task-title">Task name <span class="required-mark" aria-hidden="true">*</span></label>
+          <input id="task-title" name="title" type="text" maxlength="120" placeholder="e.g. Finish the project README" required autocomplete="off">
+          <p class="field-hint">A specific next action is easiest to start.</p>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="task-category">Area</label>
+              <select id="task-category" name="category">
+                <option value="Study">Study</option>
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+                <option value="Errands">Errands</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="task-priority">Priority</label>
+              <select id="task-priority" name="priority">
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="task-due-date">Due date <span class="optional-label">OPTIONAL</span></label>
+          <input id="task-due-date" name="dueDate" type="date">
+          <p class="field-error" id="date-error" role="alert" hidden>Please choose a valid date.</p>
+
+          <div class="form-actions">
+            <button class="button button-primary" id="submit-task" type="submit"><span aria-hidden="true">＋</span> Add task</button>
+            <button class="button button-quiet" id="cancel-edit" type="button" hidden>Cancel edit</button>
+          </div>
+          <p class="form-status" id="form-status" aria-live="polite"></p>
+        </form>
+
+        <div class="privacy-note">
+          <span class="privacy-note-icon" aria-hidden="true">⌁</span>
+          <p><strong>Private by default</strong><br>Your list is saved on this device, not sent to a server.</p>
+        </div>
+      </aside>
+
+      <section class="tasks-panel" aria-labelledby="tasks-heading">
+        <div class="tasks-header">
+          <div>
+            <span class="heading-kicker">THE OVERVIEW</span>
+            <h2 id="tasks-heading">Your tasks <span class="heading-count" id="visible-count">0</span></h2>
+          </div>
+          <label class="sort-control" for="task-sort">
+            <span>Sort by</span>
+            <select id="task-sort" name="sort">
+              <option value="created">Recently added</option>
+              <option value="dueDate">Due date</option>
+              <option value="priority">Priority</option>
+              <option value="alphabetical">Name</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-symbol" aria-hidden="true">⌕</span>
+          <label class="visually-hidden" for="task-search">Search tasks</label>
+          <input id="task-search" type="search" placeholder="Search your tasks..." autocomplete="off">
+          <kbd class="search-shortcut" aria-hidden="true">/</kbd>
+        </div>
+
+        <div class="filter-row" role="group" aria-label="Filter tasks">
+          <button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">All <span id="filter-all-count">0</span></button>
+          <button type="button" class="filter-button" data-filter="active" aria-pressed="false">In progress <span id="filter-active-count">0</span></button>
+          <button type="button" class="filter-button" data-filter="completed" aria-pressed="false">Completed <span id="filter-completed-count">0</span></button>
+        </div>
+
+        <div class="progress-track" aria-label="Overall completion">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <ul class="task-list" id="task-list" aria-label="Tasks"></ul>
+        <div class="empty-state" id="empty-state">
+          <div class="empty-illustration" aria-hidden="true"><span>✓</span></div>
+          <h3 id="empty-title">A fresh start.</h3>
+          <p id="empty-description">Your list is clear. Add one small task to begin.</p>
+          <button type="button" class="text-action" id="empty-action">Create your first task <span aria-hidden="true">↗</span></button>
+        </div>
+        <p class="list-footer" id="list-footer">Your next step is waiting.</p>
+      </section>
+    </section>
+
+    <p class="keyboard-tip"><kbd>/</kbd> to search <span aria-hidden="true">·</span> Check off a task when you finish it</p>
+  </main>
+
+  <footer class="footer">
+    <span>DAYMARK <span class="footer-dot">•</span> MADE FOR STEADY PROGRESS</span>
+    <a href="https://github.com/wdf-5618/task-management-app" target="_blank" rel="noreferrer">View source on GitHub <span aria-hidden="true">↗</span></a>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

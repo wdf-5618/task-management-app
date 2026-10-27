@@ -2,7 +2,7 @@
 
 A small, responsive task manager built with HTML, CSS, and vanilla JavaScript. The goal is to practice the everyday building blocks of a web application: forms, CRUD operations, DOM rendering, filtering, sorting, browser storage, and accessible interaction patterns.
 
-**Live demo:** [Open Daymark on Vercel](https://task-management-app-wdf-5618s-projects.vercel.app). Task data is stored in the current browser only.  
+**Live demo:** [Open Daymark on Vercel](https://task-management-app-pi-murex.vercel.app). Task data is stored in the current browser only.  
 **Source:** [wdf-5618/task-management-app](https://github.com/wdf-5618/task-management-app)
 
 ## Features
